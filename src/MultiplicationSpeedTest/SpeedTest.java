@@ -9,7 +9,6 @@ public class SpeedTest {
     private int score;
     private ArrayList<Pair> picked;
     private ArrayList<Pair> incorrect;
-    private int finalTime;
     private boolean finished;
 
     public SpeedTest(int multiplier, boolean isRandom){
@@ -18,7 +17,6 @@ public class SpeedTest {
         score = 0;
         picked = new ArrayList<>();
         incorrect = new ArrayList<>();
-        finalTime = 0;
         finished = false;
     }
 
@@ -58,9 +56,4 @@ public class SpeedTest {
     boolean isFinished(){
         return finished;
     }
-
-    int getFinalTime(){
-        return finalTime;
-    }
-
 }

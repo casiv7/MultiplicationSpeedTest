@@ -2,6 +2,8 @@ package MultiplicationSpeedTest;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SpeedTestGUI{
     private final int SETTINGS_WINDOW_HEIGHT = 250;
@@ -10,6 +12,24 @@ public class SpeedTestGUI{
     private final int MAIN_WINDOW_WIDTH = 420;
 
     private SpeedTest test;
+    //Stopwatch
+    private int timeElapsed;
+    private int seconds = 0;
+    private int minutes = 0;
+    String secondsString = String.format("%02d", seconds);
+    String minutesString = String.format("%02d", minutes);
+    JLabel stopwatchLabel = new JLabel(minutesString+":"+secondsString, SwingConstants.CENTER);
+    Timer stopwatch = new Timer(1000, new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            timeElapsed += 1000;
+            minutes = (timeElapsed/60000) % 60;
+            seconds = (timeElapsed/1000) % 60;
+            String secondsString = String.format("%02d", seconds);
+            String minutesString = String.format("%02d", minutes);
+            stopwatchLabel.setText(minutesString+":"+secondsString);
+        }
+    });
 
     public SpeedTestGUI(){
         createSettingsWindow();
@@ -71,8 +91,6 @@ public class SpeedTestGUI{
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(3, 1));
 
-        JLabel timer = new JLabel("Time", SwingConstants.CENTER);
-
         JLabel displayQuestion = new JLabel(test.getQuestion(), SwingConstants.CENTER);
 
         JTextField answer = new JTextField(15);
@@ -85,18 +103,20 @@ public class SpeedTestGUI{
                     answer.setText("");
                     displayQuestion.setText(test.getQuestion());
                 } else {
+                    stopwatch.stop();
                     mainFrame.dispose();
                     createResultsWindow();
                 }
             }
         });
 
-        mainPanel.add(timer);
+        mainPanel.add(stopwatchLabel);
         mainPanel.add(displayQuestion);
         mainPanel.add(answer);
 
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
+        stopwatch.start();
     }
 
     private void createResultsWindow(){
@@ -104,7 +124,11 @@ public class SpeedTestGUI{
         JFrame resultsFrame = new JFrame("Results");
         resultsFrame.setSize(350, 350);
         resultsFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JPanel resultsPanel = new JPanel(new GridLayout(3, 1));
+        JPanel resultsPanel = new JPanel(new GridLayout(4, 1));
+
+        //Create Final Time Label
+        JLabel finalTime = new JLabel("Final Time: " + stopwatchLabel.getText(), SwingConstants.CENTER);
+        resultsPanel.add(finalTime);
 
         //Create Raw Score and Percentage Label
         JLabel rawScore = new JLabel("Raw Score: "+ test.getScore(), SwingConstants.CENTER);
