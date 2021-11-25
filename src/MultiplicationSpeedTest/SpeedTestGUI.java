@@ -124,7 +124,7 @@ public class SpeedTestGUI{
         JFrame resultsFrame = new JFrame("Results");
         resultsFrame.setSize(350, 350);
         resultsFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JPanel resultsPanel = new JPanel(new GridLayout(4, 1));
+        JPanel resultsPanel = new JPanel(new GridLayout(5, 1));
 
         //Create Final Time Label
         JLabel finalTime = new JLabel("Final Time: " + stopwatchLabel.getText(), SwingConstants.CENTER);
@@ -147,6 +147,15 @@ public class SpeedTestGUI{
         }
         JScrollPane incorrectScrollPane = new JScrollPane(incorrectTextArea);
         resultsPanel.add(incorrectScrollPane);
+
+        JButton restart = new JButton("Restart Test");
+        restart.addActionListener(e -> {
+            resultsFrame.dispose();
+            timeElapsed = 0;
+            stopwatchLabel.setText("00:00");
+            createSettingsWindow();
+        });
+        resultsPanel.add(restart);
 
         resultsFrame.add(resultsPanel);
         resultsFrame.setVisible(true);
